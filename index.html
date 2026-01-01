@@ -13,20 +13,22 @@
     .card{background:#151515; border:1px solid #242424; border-radius:16px; padding:16px; margin:12px 0;}
     h1{font-size:20px; margin:0 0 12px;}
     .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
-    .chip{padding:10px 12px; border-radius:999px; background:#1f1f1f; border:1px solid #2c2c2c; cursor:pointer;}
+    .chip{padding:10px 12px; border-radius:999px; background:#1f1f1f; border:1px solid #2c2c2c; cursor:pointer; user-select:none;}
     .chip.active{background:#2a2a2a; border-color:#7a7a7a;}
     .big{font-size:56px; font-weight:700; letter-spacing:1px; margin:10px 0;}
     .btn{padding:12px 14px; border-radius:14px; border:1px solid #2c2c2c; background:#1f1f1f; color:#fff; cursor:pointer;}
     .btn.primary{background:#ffffff; color:#000; border-color:#fff;}
     .btn.danger{background:#2a1212; border-color:#4a1f1f;}
+    .btn:disabled{opacity:.5; cursor:not-allowed;}
     input, select{padding:10px 12px; border-radius:12px; border:1px solid #2c2c2c; background:#111; color:#fff;}
     table{width:100%; border-collapse:collapse; font-size:14px;}
-    td,th{border-bottom:1px solid #2a2a2a; padding:10px 6px; text-align:left;}
+    td,th{border-bottom:1px solid #2a2a2a; padding:10px 6px; text-align:left; vertical-align:top;}
     .muted{color:#bdbdbd; font-size:13px;}
     .tabs{display:flex; gap:8px;}
-    .tab{flex:1; text-align:center; padding:10px; border-radius:14px; background:#121212; border:1px solid #2a2a2a; cursor:pointer;}
+    .tab{flex:1; text-align:center; padding:10px; border-radius:14px; background:#121212; border:1px solid #2a2a2a; cursor:pointer; user-select:none;}
     .tab.active{background:#1d1d1d; border-color:#6b6b6b;}
     .note{font-size:12px; color:#cfcfcf; line-height:1.35;}
+    .right{margin-left:auto;}
   </style>
 </head>
 <body>
@@ -63,21 +65,32 @@
         </div>
 
         <div style="height:8px"></div>
-        <div class="note">* Khi đang mở app, hết giờ sẽ phát tiếng “beep”. (iPhone có thể cần bạn chạm màn hình 1 lần để cho phép âm thanh.)</div>
+        <div class="note">
+          * Khi đang mở app, hết giờ sẽ phát “beep”. (iPhone có thể cần bạn chạm màn hình 1 lần để cho phép âm thanh.)
+        </div>
       </div>
     </div>
 
-    <!-- SUPP -->
+    <!-- SUPPLEMENTS -->
     <div id="screenSupp" style="display:none;">
       <div class="card">
         <div class="muted">Thêm nhắc uống TPBS (nhắc trong app)</div>
+
         <div class="row">
           <input id="suppName" placeholder="Tên TPBS (vd: Creatine)" style="flex:1; min-width:180px;">
           <input id="suppTime" type="time" value="08:00">
+
+          <select id="suppFreq" title="Tần suất">
+            <option value="1">Mỗi ngày</option>
+            <option value="2">Cách 1 ngày</option>
+          </select>
+
           <button class="btn primary" id="btnAddSupp">Thêm</button>
         </div>
+
         <div class="note" style="margin-top:10px">
-          Nếu bạn muốn nhắc “khi khóa màn hình”, cách ổn nhất là tạo thông báo bằng app <b>Nhắc nhở (Reminders)</b> của iPhone.
+          Lưu ý: PWA thường nhắc tốt nhất khi bạn đang mở app. Nếu muốn nhắc chắc chắn khi khóa màn hình,
+          bạn nên tạo nhắc trong app <b>Nhắc nhở (Reminders)</b> của iPhone.
         </div>
       </div>
 
@@ -85,20 +98,30 @@
         <div class="row" style="justify-content:space-between;">
           <div>
             <div style="font-weight:700;">Danh sách nhắc</div>
-            <div class="muted">Tự kiểm tra mỗi 30 giây khi bạn đang mở app.</div>
+            <div class="muted">App tự kiểm tra mỗi 30 giây khi bạn đang mở.</div>
           </div>
-          <button class="btn" id="btnTestNotify">Test thông báo</button>
+          <div class="row right">
+            <button class="btn" id="btnTestNotify">Test thông báo</button>
+            <button class="btn danger" id="btnClearAll">Xóa tất cả</button>
+          </div>
         </div>
 
         <div style="height:8px"></div>
+
         <table>
           <thead>
-            <tr><th>TPBS</th><th>Giờ</th><th>Trạng thái</th><th></th></tr>
+            <tr>
+              <th>TPBS</th>
+              <th>Giờ / Tần suất</th>
+              <th>Trạng thái</th>
+              <th></th>
+            </tr>
           </thead>
           <tbody id="suppTable"></tbody>
         </table>
       </div>
     </div>
+
   </div>
 
   <script src="app.js"></script>
