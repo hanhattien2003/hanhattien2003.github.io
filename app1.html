@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Gym Timer</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#111111">
+  <style>
+    :root{font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;}
+    body{margin:0; background:#0b0b0b; color:#fff;}
+    .wrap{max-width:720px; margin:0 auto; padding:16px;}
+    .card{background:#151515; border:1px solid #242424; border-radius:16px; padding:16px; margin:12px 0;}
+    h1{font-size:20px; margin:0 0 12px;}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+    .chip{padding:10px 12px; border-radius:999px; background:#1f1f1f; border:1px solid #2c2c2c; cursor:pointer;}
+    .chip.active{background:#2a2a2a; border-color:#7a7a7a;}
+    .big{font-size:56px; font-weight:700; letter-spacing:1px; margin:10px 0;}
+    .btn{padding:12px 14px; border-radius:14px; border:1px solid #2c2c2c; background:#1f1f1f; color:#fff; cursor:pointer;}
+    .btn.primary{background:#ffffff; color:#000; border-color:#fff;}
+    .btn.danger{background:#2a1212; border-color:#4a1f1f;}
+    input, select{padding:10px 12px; border-radius:12px; border:1px solid #2c2c2c; background:#111; color:#fff;}
+    table{width:100%; border-collapse:collapse; font-size:14px;}
+    td,th{border-bottom:1px solid #2a2a2a; padding:10px 6px; text-align:left;}
+    .muted{color:#bdbdbd; font-size:13px;}
+    .tabs{display:flex; gap:8px;}
+    .tab{flex:1; text-align:center; padding:10px; border-radius:14px; background:#121212; border:1px solid #2a2a2a; cursor:pointer;}
+    .tab.active{background:#1d1d1d; border-color:#6b6b6b;}
+    .note{font-size:12px; color:#cfcfcf; line-height:1.35;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🏋️ Gym Timer</h1>
+
+    <div class="tabs">
+      <div class="tab active" id="tabTimer">Nghỉ giữa set</div>
+      <div class="tab" id="tabSupp">Nhắc TPBS</div>
+    </div>
+
+    <!-- TIMER -->
+    <div id="screenTimer">
+      <div class="card">
+        <div class="muted">Chọn thời gian nghỉ</div>
+        <div class="row" id="chips"></div>
+
+        <div class="big" id="timeText">01:30</div>
+
+        <div class="row">
+          <button class="btn primary" id="btnStart">Bắt đầu</button>
+          <button class="btn" id="btnPause" disabled>Tạm dừng</button>
+          <button class="btn danger" id="btnReset">Đặt lại</button>
+        </div>
+
+        <div style="height:10px"></div>
+
+        <div class="row">
+          <div>Set:</div>
+          <button class="btn" id="btnMinus">-</button>
+          <div id="setText" style="min-width:90px; text-align:center; font-weight:600;">1 / 4</div>
+          <button class="btn" id="btnPlus">+</button>
+          <button class="btn" id="btnDone">Xong set → nghỉ</button>
+        </div>
+
+        <div style="height:8px"></div>
+        <div class="note">* Khi đang mở app, hết giờ sẽ phát tiếng “beep”. (iPhone có thể cần bạn chạm màn hình 1 lần để cho phép âm thanh.)</div>
+      </div>
+    </div>
+
+    <!-- SUPP -->
+    <div id="screenSupp" style="display:none;">
+      <div class="card">
+        <div class="muted">Thêm nhắc uống TPBS (nhắc trong app)</div>
+        <div class="row">
+          <input id="suppName" placeholder="Tên TPBS (vd: Creatine)" style="flex:1; min-width:180px;">
+          <input id="suppTime" type="time" value="08:00">
+          <button class="btn primary" id="btnAddSupp">Thêm</button>
+        </div>
+        <div class="note" style="margin-top:10px">
+          Nếu bạn muốn nhắc “khi khóa màn hình”, cách ổn nhất là tạo thông báo bằng app <b>Nhắc nhở (Reminders)</b> của iPhone.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row" style="justify-content:space-between;">
+          <div>
+            <div style="font-weight:700;">Danh sách nhắc</div>
+            <div class="muted">Tự kiểm tra mỗi 30 giây khi bạn đang mở app.</div>
+          </div>
+          <button class="btn" id="btnTestNotify">Test thông báo</button>
+        </div>
+
+        <div style="height:8px"></div>
+        <table>
+          <thead>
+            <tr><th>TPBS</th><th>Giờ</th><th>Trạng thái</th><th></th></tr>
+          </thead>
+          <tbody id="suppTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
